@@ -94,7 +94,31 @@ public class DesktopsTest extends Utility {
         //2.7 Verify the Text "HP LP3065"
         Assert.assertEquals("HP LP3065", getTextFromElement(By.xpath("//h1[normalize-space()='HP LP3065']")));
         //2.8 Select Delivery Date "2023-11-27"
+        String year = "2023";
+        String month = "November";
+        String date = "27";
+        clickOnElement(By.xpath("//i[@class='fa fa-calendar']")); // Open the calendar
 
+        while (true) {
+            String monthAndYear = getTextFromElement(By.cssSelector("div[class='datepicker-days'] th[class='picker-switch']"));
+            //System.out.println(monthAndYear);
+            String[] a = monthAndYear.split(" ");
+            String mon = a[0];
+            String yer = a[1];
+            if (mon.equals(month) && yer.equals(year)) {
+                break;
+            } else {
+                clickOnElement(By.cssSelector("div[class='datepicker-days'] th[class='next']"));
+            }
+        }
+        // Select the Date
+        List<WebElement> allDates = driver.findElements(By.xpath("//tbody//tr/td[@class='day']"));
+        for (WebElement dt : allDates) {
+            if (dt.getText().equals(date)) {
+                dt.click();
+                break;
+            }
+        }
         //2.9.Enter Qty "1” using Select class.
         driver.findElement(By.xpath("//input[@id='input-quantity']")).clear();
         sendTextToElement(By.xpath("//input[@id='input-quantity']"), "1");
@@ -110,7 +134,7 @@ public class DesktopsTest extends Utility {
         //2.14 Verify the Product name "HP LP3065"
         Assert.assertEquals("HP LP3065", getTextFromElement(By.xpath("//body[1]/div[2]/div[1]/div[1]/form[1]/div[1]/table[1]/tbody[1]/tr[1]/td[2]/a[1]")));
         //2.15 Verify the Delivery Date "2023-11-27"
-
+        String actualDate = getTextFromElement(By.xpath("//small[contains(text(),'Delivery Date:')]")).replace("Delivery Date:", "").trim();
         //2.16 Verify the Model "Product21"
         Assert.assertEquals("Product21", getTextFromElement(By.xpath("//td[normalize-space()='Product 21']")));
         //2.17 Verify the Total "£74.73"
